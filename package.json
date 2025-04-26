@@ -6,14 +6,17 @@
   "scripts": {
     "dev": "vite",
     "build": "vue-tsc && vite build && electron-builder",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "postinstall": "electron-rebuild"
   },
   "dependencies": {
+    "better-sqlite3": "^11.9.1",
     "electron-store": "^10.0.1",
     "vue": "^3.4.21",
     "vue-router": "^4.5.0"
   },
   "devDependencies": {
+    "@electron/rebuild": "^3.7.2",
     "@vitejs/plugin-vue": "^5.0.4",
     "electron": "^30.0.1",
     "electron-builder": "^24.13.3",

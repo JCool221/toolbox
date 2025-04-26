@@ -14916,18 +14916,18 @@ class Conf {
     const fileExtension = options.fileExtension ? `.${options.fileExtension}` : "";
     this.path = path.resolve(options.cwd, `${options.configName ?? "config"}${fileExtension}`);
     const fileStore = this.store;
-    const store2 = Object.assign(createPlainObject(), options.defaults, fileStore);
+    const store = Object.assign(createPlainObject(), options.defaults, fileStore);
     if (options.migrations) {
       if (!options.projectVersion) {
         throw new Error("Please specify the `projectVersion` option.");
       }
       this._migrate(options.migrations, options.projectVersion, options.beforeEachMigration);
     }
-    this._validate(store2);
+    this._validate(store);
     try {
-      assert.deepEqual(fileStore, store2);
+      assert.deepEqual(fileStore, store);
     } catch {
-      this.store = store2;
+      this.store = store;
     }
     if (options.watch) {
       this._watch();
@@ -14937,8 +14937,8 @@ class Conf {
     if (__privateGet(this, _options).accessPropertiesByDotNotation) {
       return this._get(key, defaultValue);
     }
-    const { store: store2 } = this;
-    return key in store2 ? store2[key] : defaultValue;
+    const { store } = this;
+    return key in store ? store[key] : defaultValue;
   }
   set(key, value) {
     if (typeof key !== "string" && typeof key !== "object") {
@@ -14950,13 +14950,13 @@ class Conf {
     if (this._containsReservedKey(key)) {
       throw new TypeError(`Please don't use the ${INTERNAL_KEY} key, as it's used to manage this module internal operations.`);
     }
-    const { store: store2 } = this;
+    const { store } = this;
     const set = (key2, value2) => {
       checkValueType(key2, value2);
       if (__privateGet(this, _options).accessPropertiesByDotNotation) {
-        setProperty(store2, key2, value2);
+        setProperty(store, key2, value2);
       } else {
-        store2[key2] = value2;
+        store[key2] = value2;
       }
     };
     if (typeof key === "object") {
@@ -14967,7 +14967,7 @@ class Conf {
     } else {
       set(key, value);
     }
-    this.store = store2;
+    this.store = store;
   }
   /**
       Check if an item exists.
@@ -14995,13 +14995,13 @@ class Conf {
     }
   }
   delete(key) {
-    const { store: store2 } = this;
+    const { store } = this;
     if (__privateGet(this, _options).accessPropertiesByDotNotation) {
-      deleteProperty(store2, key);
+      deleteProperty(store, key);
     } else {
-      delete store2[key];
+      delete store[key];
     }
-    this.store = store2;
+    this.store = store;
   }
   /**
       Delete all items.
@@ -15224,9 +15224,9 @@ class Conf {
     return getProperty(this.store, key, defaultValue);
   }
   _set(key, value) {
-    const { store: store2 } = this;
-    setProperty(store2, key, value);
-    this.store = store2;
+    const { store } = this;
+    setProperty(store, key, value);
+    this.store = store;
   }
 }
 _validator = new WeakMap();
@@ -15289,10 +15289,10 @@ class ElectronStore extends Conf {
     }
   }
 }
-const store = new ElectronStore();
+const userStore = new ElectronStore();
 const userState = {
   users: {
-    default: {
+    "defaultUserID": {
       name: "default",
       activeGame: null,
       games: []
@@ -15300,13 +15300,27 @@ const userState = {
   },
   active: "default"
 };
-if (Object.keys(store.store).length === 0) {
-  store.set(userState);
+if (Object.keys(userStore.store).length === 0) {
+  userStore.set(userState);
 }
 function setupStoreIPC() {
-  ipcMain$1.handle("dispatch: getUser", () => store.store);
-  ipcMain$1.handle("dispatch: setUser", (_, userState2, newState) => {
-    store.set(...userState2, newState);
+  ipcMain$1.handle("dispatch: getUser", () => userStore.store);
+  ipcMain$1.handle("dispatch: newUser", (_, patch2) => {
+    const current = userStore.store;
+    const updated = {
+      ...current,
+      ...patch2,
+      users: {
+        ...current.users,
+        ...patch2.users
+      }
+    };
+    userStore.set(updated);
+  });
+  ipcMain$1.handle("dispatch:addGame", (_, userId, game) => {
+    const state = userStore.store;
+    state.users[userId].games.push(game);
+    userStore.set(state);
   });
 }
 createRequire(import.meta.url);

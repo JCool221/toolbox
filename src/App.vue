@@ -1,26 +1,18 @@
 <script setup lang="ts">
 import HelloWorld from './components/HelloWorld.vue'
+import Dropdown from './components/Dropdown.vue';
 </script>
 
 <template>
-  <div>
-    <RouterLink to='/home'>go to the home</RouterLink>
-  </div>
-  <HelloWorld msg="Vite + Vue" />
+  <nav>
+    <Dropdown />
+    <!-- this line isn't necessary but i'm leaving it for now for syntax -->
+    <!-- <RouterLink to='/home'>go to the home</RouterLink> -->
+  </nav>
+  <HelloWorld msg="Homebrew Toolbox" />
   <RouterView />
 </template>
 
 <style scoped>
-.logo {
-  height: 6em;
-  padding: 1.5em;
-  will-change: filter;
-  transition: filter 300ms;
-}
-.logo:hover {
-  filter: drop-shadow(0 0 2em #646cffaa);
-}
-.logo.vue:hover {
-  filter: drop-shadow(0 0 2em #42b883aa);
-}
+
 </style>
