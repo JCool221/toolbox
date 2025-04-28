@@ -1,12 +1,20 @@
 <template>
-    <div class="dropdown" style="position: relative; display: inline-block;">
-      <button @click="open = !open" class="dropdown-button">
+    <div class="dropdown">
+      <button @click="open = !open" class="dropdown-button" autofocus>
         {{ selected || "Select an option" }}
       </button>
-      <ul v-if="open" class="dropdown-menu">
-        <li v-for="option in options" :key="option" 
+      <ul v-if="open" 
+      @keydown="handleArrowNav"
+      tabindex="0"
+   
+      class="dropdown-menu">
+        <li v-for="(option, index) in options" 
+            :key="index" 
+            :class="{ 'focused': focusedIndex === index }"
+            @mouseenter="setFocus(index)"
+            @mouseleave="removeFocus"
             @click="select(option)"
-            style="padding: 8px; cursor: pointer;">
+            >
           {{ option }}
         </li>
       </ul>
@@ -14,16 +22,23 @@
   </template>
   
   <script setup>
-import { ref, watch, onMounted, onBeforeUnmount } from 'vue'
+import { ref } from 'vue'
   
   const open = ref(false)
   const selected = ref(null)
-  const highlightedIndex = ref(0)
+  const focusedIndex = ref(-1)
+  const setFocus = (index) => {
+    focusedIndex.value = index
+  }
+  const removeFocus = () => {
+    focusedIndex.value = -1
+  }
 
   const options = ['Option 1', 'Option 2', 'Option 3']
   
   function select(option) {
     selected.value = option
+    console.log("Selected: ", option)
     open.value = false
   }
 
@@ -32,15 +47,16 @@ import { ref, watch, onMounted, onBeforeUnmount } from 'vue'
 
     switch (e.key) {
         case 'ArrowDown':
-            highlightedIndex.value = (highlightedIndex.value + 1 ) % options.length
+            focusedIndex.value = (focusedIndex.value + 1 ) % options.length
+            console.log('up')
             e.preventDefault()
         break
         case 'ArrowUp':
-            highlightedIndex.value = (highlightedIndex.value -1 + options.length) % options.length
+            focusedIndex.value = (focusedIndex.value -1 + options.length) % options.length
             e.preventDefault()
         break
         case 'Enter':
-            select(options[highlightedIndex.value])
+            select(options[focusedIndex.value])
             e.preventDefault()
         break
         case 'Escape':
@@ -50,25 +66,13 @@ import { ref, watch, onMounted, onBeforeUnmount } from 'vue'
     }
   }
 
-  function attachListener(){
-    window.addEventListener('keydown', handleArrowNav)
-  }
-  function removeListener(){
-    window.removeEventListener('keydown', handleArrowNav)
-  }
-  watch(open, (newVal) => {
-    if (newVal) {
-        attachListener()
-    } else {
-        removeListener()
-    }
-  })
-  onBeforeUnmount(() => {
-    removeListener()
-  })
   </script>
 
 <style scoped>
+    .dropdown{
+        position: relative;
+        display: inline-block;
+    }
     ul{
         position: absolute;
         background-color: white;
@@ -78,8 +82,16 @@ import { ref, watch, onMounted, onBeforeUnmount } from 'vue'
         list-style: none;
         padding: 0;
     }
-    li:hover {
+    li{
+        padding: 8px;
+        cursor: pointer;
+    }
+    li.focused,
+    li:hover,
+    li:focus{
+        outline:none;
         background-color: black;
         color: white;
-    }
+    } 
+
 </style>
