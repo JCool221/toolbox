@@ -1,32 +1,51 @@
 <template>
     <div class="dropdown">
-      <button @click="open = !open" class="dropdown-button" autofocus>
+      <button @click="open = !open" class="dropdown-button" ref="controller">
         {{ selected || "Select an option" }}
       </button>
       <ul v-if="open" 
+      class="dropdown-menu"
+      >
+      <li v-for="(option, index) in options" 
+      :key="index" 
+      @mouseenter="setFocus(index)"
+      @mouseleave="removeFocus"
+      @click="select(option)"
       @keydown="handleArrowNav"
-      tabindex="0"
-   
-      class="dropdown-menu">
-        <li v-for="(option, index) in options" 
-            :key="index" 
-            :class="{ 'focused': focusedIndex === index }"
-            @mouseenter="setFocus(index)"
-            @mouseleave="removeFocus"
-            @click="select(option)"
+            tabindex="0"
             >
-          {{ option }}
-        </li>
-      </ul>
-    </div>
-  </template>
+            {{ option }}
+          </li>
+        </ul>
+      </div>
+    </template>
   
   <script setup>
-import { ref } from 'vue'
+  // :class="{ 'focused': focusedIndex === index }"
+import { ref, onMounted, watch } from 'vue'
+
+defineProps({
+  options: {
+    type: Array,
+    required: true
+  }
+});
+
+const controller = ref(null)
+  onMounted(() => {
+    controller.value?.focus()
+  })
   
   const open = ref(false)
-  const selected = ref(null)
   const focusedIndex = ref(-1)
+  watch(open, (isOpen, isClosed) => {
+    if (isOpen && !isClosed) {
+      focusedIndex.value = 0
+    } 
+  })
+
+  const selected = ref(null)
+
   const setFocus = (index) => {
     focusedIndex.value = index
   }
@@ -34,7 +53,8 @@ import { ref } from 'vue'
     focusedIndex.value = -1
   }
 
-  const options = ['Option 1', 'Option 2', 'Option 3']
+  // const options = ['Option 1', 'Option 2', 'Option 3']
+
   
   function select(option) {
     selected.value = option
@@ -48,7 +68,6 @@ import { ref } from 'vue'
     switch (e.key) {
         case 'ArrowDown':
             focusedIndex.value = (focusedIndex.value + 1 ) % options.length
-            console.log('up')
             e.preventDefault()
         break
         case 'ArrowUp':
@@ -65,6 +84,8 @@ import { ref } from 'vue'
         break
     }
   }
+
+
 
   </script>
 
@@ -86,7 +107,10 @@ import { ref } from 'vue'
         padding: 8px;
         cursor: pointer;
     }
-    li.focused,
+    /* li.focused{
+      background-color: limegreen;
+      color: red;
+    } */
     li:hover,
     li:focus{
         outline:none;

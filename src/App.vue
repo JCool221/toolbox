@@ -1,11 +1,13 @@
 <script setup lang="ts">
 import HelloWorld from './components/HelloWorld.vue'
 import Dropdown from './components/Dropdown.vue';
+import { ref } from 'vue';
+const options = ref<string[]>(['Option 1', 'Option 2', 'Option 3'])
 </script>
 
 <template>
   <nav>
-    <Dropdown />
+    <Dropdown :options = "options"/>
     <!-- this line isn't necessary but i'm leaving it for now for syntax -->
     <!-- <RouterLink to='/home'>go to the home</RouterLink> -->
   </nav>
