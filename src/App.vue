@@ -2,10 +2,12 @@
 import HelloWorld from './components/HelloWorld.vue'
 import Dropdown from './components/Dropdown.vue';
 import { ref } from 'vue';
+import Navbar from './components/Navbar.vue';
 const options = ref<string[]>(['Option 1', 'Option 2', 'Option 3'])
 </script>
 
 <template>
+  <Navbar />
   <nav>
     <Dropdown :options = "options"/>
     <!-- this line isn't necessary but i'm leaving it for now for syntax -->

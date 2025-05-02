@@ -21,7 +21,6 @@
     </template>
   
   <script setup>
-  // :class="{ 'focused': focusedIndex === index }"
 import { ref, onMounted, watch } from 'vue'
 
 defineProps({
@@ -52,10 +51,7 @@ const controller = ref(null)
   const removeFocus = () => {
     focusedIndex.value = -1
   }
-
-  // const options = ['Option 1', 'Option 2', 'Option 3']
-
-  
+ 
   function select(option) {
     selected.value = option
     console.log("Selected: ", option)
@@ -107,10 +103,6 @@ const controller = ref(null)
         padding: 8px;
         cursor: pointer;
     }
-    /* li.focused{
-      background-color: limegreen;
-      color: red;
-    } */
     li:hover,
     li:focus{
         outline:none;
