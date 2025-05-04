@@ -5,7 +5,7 @@
     <footer>
         <div></div>
         <p>Copyright</p>
-        <p class="data">manage data</p>
+        <RouterLink to="/data">Data Manager</RouterLink>
     </footer>
 </template>
 <style scoped>
