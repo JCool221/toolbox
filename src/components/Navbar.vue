@@ -5,6 +5,7 @@
 <template>
 <nav>
     <p>Welcome</p>
+    <router-link to="/">Homebrew Toolbox</router-link>
     <button class="link-style">Login</button>
 </nav>
 
