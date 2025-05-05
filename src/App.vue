@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import HelloWorld from './components/HelloWorld.vue'
+// import HelloWorld from './components/HelloWorld.vue'
 import Footer from './components/Footer.vue';
 // import Dropdown from './components/Dropdown.vue';
 // import { ref } from 'vue';
@@ -16,7 +16,7 @@ import Navbar from './components/Navbar.vue';
       <!-- this line isn't necessary but i'm leaving it for now for syntax -->
       <!-- <RouterLink to='/home'>go to the home</RouterLink> -->
     </nav>
-    <HelloWorld msg="Homebrew Toolbox" />
+    <!-- <HelloWorld msg="Homebrew Toolbox" /> -->
     <RouterView />
     <Footer />
   </div>
