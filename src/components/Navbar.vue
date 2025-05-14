@@ -6,7 +6,7 @@
 <nav>
     <p>Welcome</p>
     <router-link to="/">Homebrew Toolbox</router-link>
-    <button class="link-style">Login</button>
+    <button class="link">Login</button>
 </nav>
 
 </template>
@@ -31,17 +31,4 @@ p{
     font-weight: bold;
 }
 
-.link-style{
-    outline: 0;
-    border: 0;
-    background: none;
-    font-size: 18px;
-    width: 5rem;
-    padding: 5px;
-}
-.link-style:hover{
-    text-decoration: underline;
-    font-size: 20px;
-    text-shadow: 0 0 10px white;
-}
 </style>
