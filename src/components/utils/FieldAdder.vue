@@ -36,12 +36,17 @@ function removeField(index) {
             </select>
         </div>
 
-        <div v-if="fields.type === 'short'">
-            <input type="text" v-model="fields.value" placeholder="short" />
+        <div v-if="(fields.length === 0)">
+            Let's get started!
         </div>
-        <div v-else="field.type === 'long'">
-            <textarea v-model="fields.value" placeholder="long"></textarea>
-        </div>
+        <!-- <div v-else>
+            <div v-if="fields.type === 'short'">
+                <input type="text" v-model="fields.value" placeholder="short" />
+            </div>
+            <div v-else="field.type === 'long'">
+                <textarea v-model="fields.value" placeholder="long"></textarea>
+            </div>
+        </div> -->
 
         <button @click="removeField(index)">Remove Field</button>
     </div>
