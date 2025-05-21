@@ -26,5 +26,5 @@
         welcome {{ user }}!
     </h1>
     <button type="button" @click = "get()">{{ res }}</button>
-    <Modal label="modal test" :form="LoginForm" className="link"/>
+    <!-- <Modal label="modal test" :form="LoginForm" className="link"/> -->
 </template>

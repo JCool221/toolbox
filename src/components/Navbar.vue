@@ -1,4 +1,22 @@
-<script setup lang="ts">
+<script setup>
+        import { onMounted, ref } from 'vue'
+    import Modal from '../components/Modal.vue'
+    import LoginForm from '../components/forms/LoginForm.vue'
+
+    const res = ref('Click Me!')
+    const user = ref(null)
+    onMounted(async () => {
+        const res = await window.dispatch.getUser()
+        user.value = res.active
+        })
+    async function get(){
+        try{
+            res.value = await window.api.get()
+            console.log(res.value)
+        } catch (e) {
+            console.log(`didn't work` + e)
+        }
+    }
 
 </script>
 
@@ -6,7 +24,9 @@
 <nav>
     <p>Welcome</p>
     <router-link to="/">Homebrew Toolbox</router-link>
-    <button class="link">Login</button>
+    <!-- <button class="link">Login</button> -->
+         <Modal label="Login" :form="LoginForm" className="link"/>
+
 </nav>
 
 </template>

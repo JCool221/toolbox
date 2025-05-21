@@ -1,6 +1,5 @@
 <script setup>
 import { ref } from 'vue';
-// import LoginForm from './forms/LoginForm.vue';
 const props = defineProps({
     label: String,
     form: {
@@ -21,8 +20,9 @@ const active = ref(false)
     v-if="active" 
     @click="active = !active" 
     class="backdrop">
-    <component :is="props.form" />
-
+    <div @click.stop class="modal-content">
+        <component :is="props.form" />
+    </div>
 </div>
 </template>
 
@@ -37,5 +37,6 @@ const active = ref(false)
     display: flex;
     align-items: center;
     justify-content: center;
+  
 }
 </style>
