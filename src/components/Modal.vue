@@ -1,20 +1,31 @@
 <script setup>
 import { ref } from 'vue';
-defineProps({
-    text: String
+const props = defineProps({
+    label: String,
+    form: {
+        type: Object,
+        required: true
+    },
+    className: {
+        type: String,
+        default: ''
+    }
 })
 const active = ref(false)
 </script>
+
 <template>
-    <button @click="active = !active">{{ text }}</button>
+    <button :class="className" @click="active = !active">{{ props.label }}</button>
 <div 
     v-if="active" 
     @click="active = !active" 
     class="backdrop">
-    <div class="splash">Hello World</div>
-
+    <div @click.stop class="modal-content">
+        <component :is="props.form" />
+    </div>
 </div>
 </template>
+
 <style scoped>
 .backdrop{
     height: 100vh;
@@ -22,7 +33,10 @@ const active = ref(false)
     position: fixed;
     background-color: black;
     opacity: 75%;
-    top: 0;
-    left: 0;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  
 }
 </style>

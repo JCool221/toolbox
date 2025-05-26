@@ -24,7 +24,7 @@ contextBridge.exposeInMainWorld('ipcRenderer', {
 })
 
 contextBridge.exposeInMainWorld('api', {
-  get: () => ipcRenderer.invoke('api: get')
+  get: (..._args: unknown[]) => ipcRenderer.invoke('api: get', ..._args)
 })
 
 contextBridge.exposeInMainWorld('dispatch', {

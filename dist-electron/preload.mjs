@@ -21,7 +21,7 @@ electron.contextBridge.exposeInMainWorld("ipcRenderer", {
   // ...
 });
 electron.contextBridge.exposeInMainWorld("api", {
-  get: () => electron.ipcRenderer.invoke("api: get")
+  get: (..._args) => electron.ipcRenderer.invoke("api: get", ..._args)
 });
 electron.contextBridge.exposeInMainWorld("dispatch", {
   getUser: () => electron.ipcRenderer.invoke("dispatch: getUser")

@@ -12,6 +12,7 @@
   "dependencies": {
     "better-sqlite3": "^11.9.1",
     "electron-store": "^10.0.1",
+    "nanoid": "^5.1.5",
     "vue": "^3.4.21",
     "vue-router": "^4.5.0"
   },

@@ -1,6 +1,10 @@
 <template>
     <div class="dropdown">
-      <button @click="open = !open" class="dropdown-button" ref="controller">
+      <button @click="open = !open"
+       class="dropdown-button" 
+       ref="controller"
+       type="button"
+       >
         {{ selected || "Select an option" }}
       </button>
       <ul v-if="open" 
