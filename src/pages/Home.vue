@@ -1,7 +1,5 @@
     <script setup>
     import { onMounted, ref } from 'vue'
-    import Modal from '../components/Modal.vue'
-    import LoginForm from '../components/forms/LoginForm.vue'
 
     const res = ref('Click Me!')
     const user = ref(null)
@@ -26,5 +24,4 @@
         welcome {{ user }}!
     </h1>
     <button type="button" @click = "get()">{{ res }}</button>
-    <!-- <Modal label="modal test" :form="LoginForm" className="link"/> -->
 </template>

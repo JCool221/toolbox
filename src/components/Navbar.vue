@@ -24,7 +24,6 @@
 <nav>
     <p>Welcome</p>
     <router-link to="/">Homebrew Toolbox</router-link>
-    <!-- <button class="link">Login</button> -->
          <Modal label="Login" :form="LoginForm" className="link"/>
 
 </nav>
@@ -32,6 +31,7 @@
 </template>
 
 <style scoped>
+/* layout is wonky, maybe grid can help? */
 nav{
     display: flex;
     align-items: center;

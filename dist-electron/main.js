@@ -12,16 +12,51 @@ var _validator, _encryptionKey, _options, _defaultValues;
 import electron, { ipcMain as ipcMain$1, app as app$1, BrowserWindow } from "electron";
 import { createRequire } from "node:module";
 import { fileURLToPath } from "node:url";
+import crypto, { webcrypto } from "node:crypto";
 import process$1 from "node:process";
 import path from "node:path";
 import { promisify, isDeepStrictEqual } from "node:util";
 import fs from "node:fs";
-import crypto from "node:crypto";
 import assert from "node:assert";
 import os from "node:os";
+const urlAlphabet = "useandom-26T198340PX75pxJACKVERYMINDBUSHWOLF_GQZbfghjklqvwyzrict";
+const POOL_SIZE_MULTIPLIER = 128;
+let pool, poolOffset;
+function fillPool(bytes) {
+  if (!pool || pool.length < bytes) {
+    pool = Buffer.allocUnsafe(bytes * POOL_SIZE_MULTIPLIER);
+    webcrypto.getRandomValues(pool);
+    poolOffset = 0;
+  } else if (poolOffset + bytes > pool.length) {
+    webcrypto.getRandomValues(pool);
+    poolOffset = 0;
+  }
+  poolOffset += bytes;
+}
+function nanoid(size = 21) {
+  fillPool(size |= 0);
+  let id2 = "";
+  for (let i = poolOffset - size; i < poolOffset; i++) {
+    id2 += urlAlphabet[pool[i] & 63];
+  }
+  return id2;
+}
+const makeUserID = () => {
+  const userID = nanoid();
+  return userID;
+};
+const testLog = () => {
+  return "no args";
+};
+const utils$1 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+  __proto__: null,
+  makeUserID,
+  testLog
+}, Symbol.toStringTag, { value: "Module" }));
 function registerApiHandlers() {
-  ipcMain$1.handle("api: get", async (_event, ...args) => {
-    return "GET GOT KID";
+  ipcMain$1.handle("api: get", async (_event, key, ..._args) => {
+    const fn = utils$1[key];
+    return typeof fn === "function" ? fn(..._args) : `Unknown key: ${key}`;
   });
 }
 const isObject = (value) => {
