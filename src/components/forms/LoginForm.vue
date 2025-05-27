@@ -6,6 +6,7 @@ import { ref, onMounted } from 'vue';
 const newUser = ref(false)
 const active = ref(null)
 const list = ref([])
+const userName = defineModel()
 let listLength
 onMounted(async () => {
     const res = await window.dispatch.getUser()
@@ -15,31 +16,33 @@ onMounted(async () => {
     console.log(res)
 })
 
-const makeUserID =async()=>{
-    const res = await window.api.get('makeUserID')
-}
+// const test = async()=>{
+//     console.log('renderer function call')
+//     const res = await window.api.get('testLog')
+//     console.log(res)
+// }
 
-const test = async()=>{
-    console.log('renderer function call')
-    const res = await window.api.get('testLog')
-    console.log(res)
+const handleSubmit = async() =>{
+    const userID = await window.api.get('makeUserID')
+    const payload = { 
+        userID, 
+        userName: userName.value 
+    }
+    console.log(payload)
+    const update = await window.dispatch.upgradeDefaultUser(payload)
 }
 
 </script>
 
 <template>
     <div v-if="newUser && listLength === 1">
-        <form name="updateDefault" @submit.prevent="handleSubmit">
+        <form name="updateDefault" @submit.prevent>
             <h1>Update Default user</h1>
+            <p>user is: {{  userName }}</p>
             <!-- <button @click="test()">test</button> -->
             <label for="name">New Username:</label>
-            <input 
-            type="text"
-            name="name"
-            id="name"
-            required
-            >
-            <button>Submit</button>
+            <input v-model="userName">
+            <button @click.stop.prevent = "handleSubmit">Submit</button>
             <button 
             @click.stop.prevent="newUser = !newUser"
             type="button"

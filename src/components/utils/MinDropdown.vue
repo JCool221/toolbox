@@ -11,7 +11,6 @@ const props = defineProps({
         required: false,
     }
 })
-console.log(props.selection, props.options)
 </script>
 <template>
 <div>

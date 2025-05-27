@@ -24,5 +24,8 @@ electron.contextBridge.exposeInMainWorld("api", {
   get: (..._args) => electron.ipcRenderer.invoke("api: get", ..._args)
 });
 electron.contextBridge.exposeInMainWorld("dispatch", {
-  getUser: () => electron.ipcRenderer.invoke("dispatch: getUser")
+  getUser: () => electron.ipcRenderer.invoke("dispatch: getUser"),
+  upgradeDefaultUser: (payload) => electron.ipcRenderer.invoke("dispatch: upgradeDefaultUser", payload),
+  // dev tools, remove in prod
+  devResetState: () => electron.ipcRenderer.invoke("dispatch: devResetState")
 });

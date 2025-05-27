@@ -15352,11 +15352,27 @@ function setupStoreIPC() {
     };
     userStore.set(updated);
   });
-  ipcMain$1.handle("dispatch:addGame", (_, userId, game) => {
+  ipcMain$1.handle("dispatch: upgradeDefaultUser", (_, { userID, userName }) => {
+    const current = userStore.store;
+    const userKeys = Object.keys(current.users);
+    if (userKeys.length !== 1 || userKeys[0] !== "defaultUserID") {
+      throw new Error("Cannot upgrade default user: unexpected user state");
+    }
+    const { games, activeGame } = current.users["defaultUserID"];
+    userStore.set({
+      ...current,
+      users: {
+        [userID]: { name: userName, activeGame, games }
+      },
+      active: userName
+    });
+  });
+  ipcMain$1.handle("dispatch: addGame", (_, userID, game) => {
     const state = userStore.store;
-    state.users[userId].games.push(game);
+    state.users[userID].games.push(game);
     userStore.set(state);
   });
+  ipcMain$1.handle("dispatch: devResetState", () => userStore.set(userState));
 }
 createRequire(import.meta.url);
 const __dirname = path.dirname(fileURLToPath(import.meta.url));

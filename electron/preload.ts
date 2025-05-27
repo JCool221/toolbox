@@ -1,4 +1,5 @@
 import { ipcRenderer, contextBridge } from 'electron'
+import { upgradePayload } from './helpers/types'
 
 // --------- Expose some API to the Renderer process ---------
 contextBridge.exposeInMainWorld('ipcRenderer', {
@@ -28,5 +29,8 @@ contextBridge.exposeInMainWorld('api', {
 })
 
 contextBridge.exposeInMainWorld('dispatch', {
-  getUser: () => ipcRenderer.invoke('dispatch: getUser')
+  getUser: () => ipcRenderer.invoke('dispatch: getUser'),
+  upgradeDefaultUser: (payload: upgradePayload) => ipcRenderer.invoke('dispatch: upgradeDefaultUser', payload),
+  // dev tools, remove in prod
+  devResetState: () => ipcRenderer.invoke('dispatch: devResetState')
 })

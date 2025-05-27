@@ -21,3 +21,8 @@ export interface UserState {
     users: Record<string, user>
     active: string
   }
+
+export interface upgradePayload {
+    userID: string
+    userName: string
+  }
