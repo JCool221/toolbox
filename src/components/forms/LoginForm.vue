@@ -32,6 +32,14 @@ const handleUpdateDefault = async() =>{
     const update = await window.dispatch.upgradeDefaultUser(payload)
 }
 
+const handleNewUser = async() => {
+    const userID = await window.api.get('makeUserID') 
+    const payload = {
+        userID,
+        userName: userName.value
+    }
+}
+
 </script>
 
 <template>
