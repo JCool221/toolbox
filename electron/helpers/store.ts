@@ -36,14 +36,14 @@ export function setupStoreIPC() {
     } )
 
     ipcMain.handle('dispatch: upgradeDefaultUser', (_, { userID, userName }) => {
-    const current = userStore.store;
+    const current = userStore.store
 
-    const userKeys = Object.keys(current.users);
+    const userKeys = Object.keys(current.users)
     if (userKeys.length !== 1 || userKeys[0] !== 'defaultUserID') {
-        throw new Error('Cannot upgrade default user: unexpected user state');
+        throw new Error('Cannot upgrade default user: unexpected user state')
     }
 
-    const { games, activeGame } = current.users['defaultUserID'];
+    const { games, activeGame } = current.users['defaultUserID']
 
     userStore.set({
         ...current,
@@ -51,14 +51,15 @@ export function setupStoreIPC() {
             [userID]: { name: userName, activeGame, games }
         },
         active: userName
-        });
-    });
+        })
+    })
 
     ipcMain.handle('dispatch: addGame', (_, userID: string, game: Game) => {
         const state = userStore.store
             state.users[userID].games.push(game)
             userStore.set(state);
-        });
+        })
+
 // dev tools, remove in prod
      ipcMain.handle('dispatch: devResetState', ()=> userStore.set(userState))   
 }

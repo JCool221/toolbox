@@ -22,7 +22,7 @@ onMounted(async () => {
 //     console.log(res)
 // }
 
-const handleSubmit = async() =>{
+const handleUpdateDefault = async() =>{
     const userID = await window.api.get('makeUserID')
     const payload = { 
         userID, 
@@ -30,6 +30,14 @@ const handleSubmit = async() =>{
     }
     console.log(payload)
     const update = await window.dispatch.upgradeDefaultUser(payload)
+}
+
+const handleNewUser = async() => {
+    const userID = await window.api.get('makeUserID') 
+    const payload = {
+        userID,
+        userName: userName.value
+    }
 }
 
 </script>
@@ -42,7 +50,7 @@ const handleSubmit = async() =>{
             <!-- <button @click="test()">test</button> -->
             <label for="name">New Username:</label>
             <input v-model="userName">
-            <button @click.stop.prevent = "handleSubmit">Submit</button>
+            <button @click.stop.prevent = "handleUpdateDefault">Submit</button>
             <button 
             @click.stop.prevent="newUser = !newUser"
             type="button"
